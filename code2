@@ -1,0 +1,93 @@
+import threading
+import random
+import folium
+from geopy.geocoders import Nominatim
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
+from PyQt5.QtCore import Qt
+import sys
+import webbrowser
+
+def simulate_traffic():
+    # Simulate some traffic data
+    traffic_data = {
+        'Time': [random.randint(0, 23) for _ in range(100)],
+        'Traffic_Level': [random.choice(['Low', 'Medium', 'High']) for _ in range(100)]
+    }
+
+    # Start a new thread to monitor the traffic data
+    thread = threading.Thread(target=monitor_traffic, args=(traffic_data,))
+    thread.start()
+
+    return traffic_data
+
+def monitor_traffic(traffic_data):
+    # Monitor the traffic data and update the map as needed
+    while True:
+        # Do some work here to monitor the traffic data and update the map
+        pass
+
+def get_location(place_name):
+    geolocator = Nominatim(user_agent="myapp")
+    location = geolocator.geocode(place_name)
+    if location:
+        return location.latitude, location.longitude
+    else:
+        return None
+
+def create_traffic_map(location_coordinates):
+    map_location = folium.Map(location=location_coordinates, zoom_start=12)
+
+    # Add the openstreetmap traffic layer
+    folium.TileLayer('openstreetmap').add_to(map_location)
+    folium.LayerControl().add_to(map_location)
+
+    # Display the clustered data on the map
+    traffic_data = simulate_traffic()
+    display_clustered_data(map_location, traffic_data)
+
+    # Add a marker for the traffic location
+    folium.Marker(location_coordinates, popup="Traffic Location", icon=folium.Icon(color='red')).add_to(map_location)
+
+    return map_location
+
+def display_clustered_data(map_location, traffic_data):
+    # Add function to display clustered data (I'm assuming you have this function implemented)
+    pass
+
+def show_map():
+    place_name = entry.text()  # خواندن ورودی از فیلد متنی
+
+    place_coordinates = get_location(place_name)
+
+    if place_coordinates:
+        place_map = create_traffic_map(place_coordinates)
+        map_file = "Traffic_Map.html"
+        place_map.save(map_file)
+        webbrowser.open(map_file)
+        label_result.setText("نقشه ترافیک محل مورد نظر نمایش داده شد!")
+    else:
+        label_result.setText("مکانیت برای این مکان یافت نشد.")
+
+app = QApplication(sys.argv)
+window = QWidget()
+window.setWindowTitle("نقشه ترافیک")
+
+layout = QVBoxLayout()
+
+label = QLabel("نام مکان یا آدرس مورد نظر را وارد کنید:")
+layout.addWidget(label)
+
+entry = QLineEdit()
+layout.addWidget(entry)
+
+button = QPushButton("نمایش نقشه ترافیک")
+button.clicked.connect(show_map)
+layout.addWidget(button)
+
+label_result = QLabel("", alignment=Qt.AlignmentFlag.AlignRight)
+layout.addWidget(label_result)
+
+window.setLayout(layout)
+window.show()
+
+sys.exit(app.exec_())
