@@ -1,4 +1,3 @@
-# smart_control_traffic_system
 # smart-control-traffic-system
 سیستم هوشمند کنترل ترافیک 
 ### Read Me
