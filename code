@@ -1,0 +1,125 @@
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton
+import sys
+import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import folium
+
+class TrafficManagementSystem:
+    # کدهای مدیریت ترافیک
+    # ...
+
+    def collect_data():
+        pass
+        # کدهای جمع‌آوری داده
+        # ...
+
+    def process_data(data):
+        pass
+        # کدهای پردازش داده
+        # ...
+
+    def read_data(input_path):
+        pass
+        # کدهای خواندن داده
+        # ...
+
+    def optimize_k(df, k_range):
+        pass
+        # کدهای بهینه‌سازی KMeans
+        # ...
+
+    def run_kmeans(df, k):
+        pass
+        # کدهای اجرای الگوریتم KMeans
+        # ...
+
+    def write_output(df, output_path):
+        pass
+        # کدهای نوشتن خروجی
+        # ...
+
+    def execute_strategies(processed_data):
+        pass
+        # کدهای اجرای استراتژی‌ها
+        # ...
+
+    def monitor_performance(strategies):
+        pass
+        # کدهای نظارت بر عملکرد
+        # ...
+
+    def create_map():
+        pass
+        # کدهای ساخت نقشه
+    # ...
+
+class TrafficControlApp(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("سیستم هوشمند کنترل ترافیک")
+        self.layout = QVBoxLayout()
+
+        self.info_label = QLabel("اطلاعات ترافیک")
+        self.layout.addWidget(self.info_label)
+
+        self.entry1 = QLineEdit()
+        self.entry1.setPlaceholderText("نام خیابان مبدأ")
+        self.layout.addWidget(self.entry1)
+
+        self.entry2 = QLineEdit()
+        self.entry2.setPlaceholderText("نام خیابان مقصد")
+        self.layout.addWidget(self.entry2)
+
+        self.entry3 = QLineEdit()
+        self.entry3.setPlaceholderText("زمان حرکت")
+        self.layout.addWidget(self.entry3)
+
+        self.button1 = QPushButton("دریافت مسیر")
+        self.button1.clicked.connect(self.get_routes)
+        self.layout.addWidget(self.button1)
+
+        self.label4 = QLabel()
+        self.layout.addWidget(self.label4)
+
+        self.setLayout(self.layout)
+
+    def get_routes(self):
+        source_street = self.entry1.text()
+        destination_street = self.entry2.text()
+        time = self.entry3.text()
+
+        routes = f"مسیر انتخابی: {source_street} به {destination_street}"
+        self.label4.setText(routes)
+
+
+def main():
+    data = collect_data()
+    processed_data = process_data(data)
+    
+    input_path = 'data/input.csv'
+    df = read_data(input_path)
+    
+    k_range = range(2, 11)
+    output_path = 'data/output.csv'
+    
+    k = optimize_k(df, k_range)
+    df = run_kmeans(df, k)
+    write_output(df, output_path)
+    
+    strategies = execute_strategies(processed_data)
+    performance_metrics = monitor_performance(strategies)
+    
+    map_Tehran = create_map()
+    map_Tehran.save("Tehran_Map.html")
+    
+    print("Performance Metrics:")
+    print(performance_metrics)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = TrafficControlApp()
+    window.show()
+    sys.exit(app.exec_())
